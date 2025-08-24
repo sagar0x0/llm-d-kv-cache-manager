@@ -33,8 +33,8 @@ func TestInMemoryAddBasic(t *testing.T) {
 func TestInMemoryIndexSize(t *testing.T) {
 	// Test with small size to verify eviction
 	cfg := &kvblock.InMemoryIndexConfig{
-		Size:         2, // Only 2 keys max
-		PodCacheSize: 1, // Pod cache size doesn't matter for this test
+		MaxCost:         1 << 29 , // Only 512 MB 
+		NumCounters: 1e7, // Pod cache size doesn't matter for this test
 	}
 
 	index, err := kvblock.NewInMemoryIndex(cfg)
@@ -71,8 +71,8 @@ func TestInMemoryIndexSize(t *testing.T) {
 func TestInMemoryIndexPodCacheSize(t *testing.T) {
 	// Test with small limits to verify enforcement
 	cfg := &kvblock.InMemoryIndexConfig{
-		Size:         1, // Only 1 key max
-		PodCacheSize: 2, // Only 2 pods per key
+		MaxCost:         1 << 29 , // Only 512 MB 
+		NumCounters: 1e7, // Pod cache size doesn't matter for this test
 	}
 
 	index, err := kvblock.NewInMemoryIndex(cfg)
@@ -98,4 +98,3 @@ func TestInMemoryIndexPodCacheSize(t *testing.T) {
 	assert.Len(t, podsPerKey[key], 2, "Should only have 2 pods due to PodCacheSize limit")
 	assert.Contains(t, podsPerKey[key], "pod2")
 	assert.Contains(t, podsPerKey[key], "pod3")
-}
